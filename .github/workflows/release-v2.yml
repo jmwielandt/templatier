@@ -27,7 +27,7 @@ jobs:
     - name: Build windows
       run: |
         cross build --release --target=x86_64-pc-windows-gnu
-        zip -r templatier-windows.zip target/release/templatier.exe
+        zip -r templatier-windows.zip project/templatier.exe
     - name: Build linux
       run: |
         cargo build --release --target=x86_64-unknown-linux-musl
