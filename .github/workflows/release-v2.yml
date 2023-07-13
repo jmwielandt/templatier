@@ -12,12 +12,12 @@ env:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: rust:alpine3.18
 
     steps:
     # download target for windows
-    - name: download windows target
-      run: rustup target add x86_64-pc-windows-gnu
+    # - name: download windows target
+    #   run: rustup target add x86_64-pc-windows-gnu
     
     # checkout
     - uses: actions/checkout@v3
