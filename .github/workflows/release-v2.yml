@@ -16,27 +16,28 @@ jobs:
 
     steps:
     # download target for windows
-    - name: download windows target
-      run: |
-        sudo apt install podman
-        cargo install cross
+    # - name: download windows target
+    #   run: |
+    #     sudo apt install podman
+    #     cargo install cross
     
     # checkout
     - uses: actions/checkout@v3
     
-    - name: Build windows
-      run: |
-        cross build --release --target=x86_64-pc-windows-gnu
-        zip -r templatier-windows.zip -i /project/templatier.exe
     - name: Build linux
       run: |
         cargo build --release --target=x86_64-unknown-linux-musl
         zip -r templatier-linux.zip target/release/templatier
     
+    # - name: Build windows
+    #   run: |
+    #     cross build --release --target=x86_64-pc-windows-gnu
+    #     zip -r templatier-windows.zip /project/templatier.exe
+    
     - name: Generate release and upload artifact
       uses: ncipollo/release-action@v1
       with:
-        artifacts: "templatier-windows.zip,templatier-linux.zip"
+        artifacts: "templatier-linux.zip"
         tag: ${{ inputs.tagName }}
         commit: master
         bodyFile: README.md
