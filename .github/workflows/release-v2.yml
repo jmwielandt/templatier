@@ -12,19 +12,21 @@ env:
 jobs:
   build:
 
-    runs-on: rust:alpine3.18
+    runs-on: ubuntu-latest
 
     steps:
     # download target for windows
-    # - name: download windows target
-    #   run: rustup target add x86_64-pc-windows-gnu
+    - name: download windows target
+      run: |
+        apt install podman
+        cargo install cross
     
     # checkout
     - uses: actions/checkout@v3
     
     - name: Build windows
       run: |
-        cargo build --release --target=x86_64-pc-windows-gnu
+        cross build --release --target=x86_64-pc-windows-gnu
         zip -r templatier-windows.zip target/release/templatier.exe
     - name: Build linux
       run: |
