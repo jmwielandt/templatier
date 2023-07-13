@@ -1,0 +1,39 @@
+name: "Generate Release"
+
+on:
+  workflow_dispatch:
+    inputs:
+      tagName:
+        required: true
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    # checkout
+    - uses: actions/checkout@v3
+    
+    - name: Build windows
+      run: |
+        cargo build --release --target=x86_64-pc-windows-gnu
+        zip -r templatier-windows.zip target/release/templatier.exe
+    - name: Build linux
+      run: |
+        cargo build --release --target=x86_64-unknown-linux-musl
+        zip -r templatier-linux.zip target/release/templatier
+    
+    - name: Generate release and upload artifact
+      uses: ncipollo/release-action@v1
+      with:
+        artifacts: "templatier-windows.zip,templatier-linux.zip"
+        tag: ${{ inputs.tagName }}
+        commit: master
+        bodyFile: README.md
+        token: ${{ secrets.GITHUB_TOKEN }}
+        allowUpdates: true
+      
