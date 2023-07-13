@@ -15,6 +15,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    # download target for windows
+    - name: download windows target
+      run: rustup target add x86_64-pc-windows-gnu
+    
     # checkout
     - uses: actions/checkout@v3
     
