@@ -1,6 +1,10 @@
+name: "Generate Release"
+
 on:
-  release:
-    types: [created]
+  workflow_dispatch:
+    inputs:
+      releaseName:
+        required: true
 
 jobs:
   release:
