@@ -1,0 +1,46 @@
+name: "Generate Release"
+
+on:
+  workflow_dispatch:
+    inputs:
+      tagName:
+        required: true
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    # download target for windows
+    # - name: download windows target
+    #   run: |
+    #     sudo apt install podman
+    #     cargo install cross
+    
+    # checkout
+    - uses: actions/checkout@v3
+    
+    - name: Build linux
+      run: |
+        cargo build --release --target=x86_64-unknown-linux-musl
+        zip -r templatier-linux.zip target/release/templatier
+    
+    # - name: Build windows
+    #   run: |
+    #     cross build --release --target=x86_64-pc-windows-gnu
+    #     zip -r templatier-windows.zip /project/templatier.exe
+    
+    - name: Generate release and upload artifact
+      uses: ncipollo/release-action@v1
+      with:
+        artifacts: "templatier-linux.zip"
+        tag: ${{ inputs.tagName }}
+        commit: master
+        bodyFile: README.md
+        token: ${{ secrets.GITHUB_TOKEN }}
+        allowUpdates: true
+      
