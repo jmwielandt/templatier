@@ -15,6 +15,9 @@ struct AppArgs {
     template: String,
     /// Archivo de variables
     vars: String,
+    /// Uses handlebars' strict mode
+    #[arg(long)]
+    strict: bool,
 }
 
 fn main() -> io::Result<()> {
@@ -28,7 +31,9 @@ fn main() -> io::Result<()> {
         .unwrap();
 
     let vars = serde_json::from_str::<serde_json::Value>(&vars)?;
-
+    if args.strict {
+        handlebars.set_strict_mode(true);
+    }
     println!("{}", handlebars.render("template", &vars).unwrap());
     Ok(())
 }
