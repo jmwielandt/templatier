@@ -18,6 +18,8 @@ struct AppArgs {
     /// Uses handlebars' strict mode
     #[arg(long)]
     strict: bool,
+    #[arg(long)]
+    dev_mode: bool,
 }
 
 fn main() -> io::Result<()> {
@@ -26,14 +28,25 @@ fn main() -> io::Result<()> {
     let template =
         fs::read_to_string(&args.template).expect("template file not found / couldn't be opened");
     let vars = fs::read_to_string(&args.vars).expect("vars file not found / couldn't be opened");
-    handlebars
-        .register_template_string("template", template)
-        .unwrap();
+    match handlebars.register_template_string("template", template) {
+        Ok(()) => {}
+        Err(e) => {
+            println!("{}", e.to_string());
+            return Ok(());
+        }
+    }
+    handlebars.set_strict_mode(args.strict);
+    handlebars.set_dev_mode(args.dev_mode);
+    // handlebars.register_helper("");
 
     let vars = serde_json::from_str::<serde_json::Value>(&vars)?;
-    if args.strict {
-        handlebars.set_strict_mode(true);
+    match handlebars.render("template", &vars) {
+        Ok(out) => {
+            println!("{out}")
+        }
+        Err(e) => {
+            println!("{}", e.to_string());
+        }
     }
-    println!("{}", handlebars.render("template", &vars).unwrap());
     Ok(())
 }
