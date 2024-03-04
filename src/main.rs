@@ -56,7 +56,7 @@ fn main() -> anyhow::Result<()> {
             println!("{out}")
         }
         Err(e) => {
-            println!("{}", e.to_string());
+            println!("{}", e);
         }
     }
     Ok(())

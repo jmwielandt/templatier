@@ -50,7 +50,7 @@ pub fn add_str_helpers(x: &mut Handlebars) {
             format!("{}...", data)
         }
     });
-    handlebars_helper!(trim: |s:String| s.trim());
+    handlebars_helper!(trim: |s: String| s.trim());
     handlebars_helper!(plural: |count: usize, sing: String, plur: String| if count == 1 {
         sing
     } else {
