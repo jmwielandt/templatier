@@ -1,8 +1,10 @@
 // credis to https://github.com/rajatjindal/handlebars-sprig
+// for some of this functions
 
 use chrono::{DateTime, Utc};
 use handlebars::{handlebars_helper, Handlebars};
 use rand::Rng;
+use serde_json::Value;
 
 pub fn add_math_helpers(x: &mut Handlebars) {
     handlebars_helper!(add: |a: isize, b: isize| a + b);
@@ -16,6 +18,12 @@ pub fn add_math_helpers(x: &mut Handlebars) {
     handlebars_helper!(ceil: |a: f64| a.ceil());
     handlebars_helper!(round: |a: f64| a.round());
     handlebars_helper!(rand_int:  | | rand::thread_rng().gen::<usize>());
+    handlebars_helper!(lt: |a: isize, b: isize| a < b);
+    handlebars_helper!(le: |a: isize, b: isize| a <= b);
+    handlebars_helper!(gt: |a: isize, b: isize| a > b);
+    handlebars_helper!(ge: |a: isize, b: isize| a >= b);
+    handlebars_helper!(eq: |a: Value, b: Value| a == b);
+    handlebars_helper!(ne: |a: Value, b: Value| a != b);
 
     x.register_helper("add", Box::new(add));
     x.register_helper("sub", Box::new(sub));
@@ -27,6 +35,12 @@ pub fn add_math_helpers(x: &mut Handlebars) {
     x.register_helper("ceil", Box::new(ceil));
     x.register_helper("round", Box::new(round));
     x.register_helper("rand_int", Box::new(rand_int));
+    x.register_helper("lt", Box::new(lt));
+    x.register_helper("le", Box::new(le));
+    x.register_helper("gt", Box::new(gt));
+    x.register_helper("ge", Box::new(ge));
+    x.register_helper("eq", Box::new(eq));
+    x.register_helper("ne", Box::new(ne));
 }
 
 pub fn add_str_helpers(x: &mut Handlebars) {
